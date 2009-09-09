@@ -1,4 +1,5 @@
 import urllib2
+from decimal import Decimal
 
 URL = 'http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s={from_curr}{to_curr}=X'
 
@@ -11,7 +12,7 @@ def _get_data(url):
     result = response.read()
     return result
 
-def convert(from_curr, to_curr='USD', amt=1.0):
+def convert(from_curr, to_curr='USD', amount=1.0):
     if from_curr.lower() == to_curr.lower():
         return amt
     
@@ -19,7 +20,7 @@ def convert(from_curr, to_curr='USD', amt=1.0):
     if data:
         exchange = data.split(',')
         try:
-            return float(exchange[1]) * amt
+            return u'{0:.3f}'.format(round(float(exchange[1]) * amount, 3))
         except (IndexError, ValueError):
             pass
-    return 0.0
+    return u'0.000'
